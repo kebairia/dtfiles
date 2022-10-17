@@ -28,7 +28,7 @@ set spell spelllang=en_us       "set the spell checking to US-English
 "KEY BINDINGS {{{
 map <leader>o :setlocal spell! spelllang=en_us<CR> "" spell checking
 map <leader>g :Neogit<CR>
-autocmd BufWritePost ~/dox/wrk/latex/cv/cv.tex !cd ~/dox/wrk/latex/cv ; xelatex -shell-escape -pdf -f cv.tex && cp cv.pdf ~/CV_Zakaria_Kebairia_2022.pdf && cp cv.pdf ~/dox/blog/content/files/
+autocmd BufWritePost ~/dox/latex/cv/cv.tex !cd ~/dox/latex/cv ; xelatex -shell-escape -pdf -f cv.tex && cp cv.pdf ~/CV_Zakaria_Kebairia_2022.pdf && cp cv.pdf ~/dox/blog/content/files/
 autocmd BufWritePost ~/dox/jobs/umaitek/zimbra_scripts/archiving/archive.sh !scp ~/dox/jobs/umaitek/zimbra_scripts/archiving/archive.sh root@192.168.2.91:/root
 " for Ansible
 autocmd FileType yaml setlocal ai ts=2 sw=2 et
@@ -63,17 +63,12 @@ set background=dark
 "
 "" Packer
 lua << EOF
-
-return require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-
-  -- IDE --
-  -- autocompletion --
-  use 'hrsh7th/nvim-cmp'
-  -- auto-pairs --
-  use 'jiangmiao/auto-pairs'
-  -- git ---
+local use = require('packer').use
+require('packer').startup(function()
+  use 'wbthomason/packer.nvim'  -- Package manager
+  use 'neovim/nvim-lspconfig'   -- Configurations for Nvim LSP
+  use 'hrsh7th/nvim-cmp'        -- autocompletion
+  use 'jiangmiao/auto-pairs'    -- auto-pairs
 end)
 EOF
 " }}}
