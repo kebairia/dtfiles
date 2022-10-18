@@ -65,10 +65,77 @@ set background=dark
 lua << EOF
 local use = require('packer').use
 require('packer').startup(function()
-  use 'wbthomason/packer.nvim'  -- Package manager
-  use 'neovim/nvim-lspconfig'   -- Configurations for Nvim LSP
-  use 'hrsh7th/nvim-cmp'        -- autocompletion
-  use 'jiangmiao/auto-pairs'    -- auto-pairs
+  use 'wbthomason/packer.nvim'      -- Package manager
+  use 'neovim/nvim-lspconfig'       -- Configurations for Nvim LSP
+  use 'hrsh7th/nvim-cmp'            -- autocompletion
+  use 'jiangmiao/auto-pairs'        -- auto-pairs
+  use 'nvim-lualine/lualine.nvim'   -- statusline
 end)
 EOF
+" }}}
+
+" PLUGINS CONFIGURATION {{{
+" LUALINE {{{2
+lua << END
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'zk-theme',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {},
+    always_divide_middle = true,
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'filetype', 'encoding'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {
+    lualine_a = {
+    {'buffers',
+      show_filename_only = true,   -- Shows shortened relative path when set to false.
+      show_modified_status = true, -- Shows indicator when the buffer is modified.
+
+      mode = 0, -- 0: Shows buffer name
+                -- 1: Shows buffer index (bufnr)
+                -- 2: Shows buffer name + buffer index (bufnr)
+    buffers_color = {
+        -- Same values as the general color option can be used here.
+        active = 'lualine_a_visual',
+        inactive = 'lualine_c_normal',
+        },     -- Color for active buffer.
+        }},
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {
+        {'tabs',
+
+        mode = 0,
+        tabs_color = {
+        -- Same values as the general color option can be used here.
+        active = 'lualine_a_visual',
+        inactive = 'lualine_c_normal',
+        },     -- Color for active buffer.
+        }
+        }
+      },
+  extensions = {}
+}
+
+END
+"2}}}
 " }}}
