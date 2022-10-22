@@ -3,3 +3,5 @@ nvim/colors/
 nvim/init.vim.old
 nvim/init.vim.yesterday
 nvim/spell/
+mpd/*
+!mpd/mpd.conf
