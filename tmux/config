@@ -1,0 +1,101 @@
+# vim: filetype=tmux
+# General {{{1
+# Default terminal
+#This sets the TERM variable for tmux to tmux-256color
+#and leaves everything outside of tmux on st-256color.
+set -ga terminal-overrides ",st-256color"
+set -g default-terminal "xterm-256color"
+# Use vim key bindings
+set-option -g mode-keys vi
+set-option -g status-keys vi
+set-option -g mouse on 				        # Turn the mouse on
+set-option -g escape-time 0			        # Time in milliseconds for which tmux waits after an escape
+set-option -g focus-events on 		        # Enable supported focus events
+# Activity
+#set-option -g monitor-activity on
+#set-option -g visual-activity off
+set-option -g base-index 1 			        # Start window index at 1
+set-option -g pane-base-index 1		        # Start pane index at 1
+set-window-option -g automatic-rename on 	# Rename window to reflect current program
+set-option -g renumber-windows on 		    # Renumber windows when one is closed
+set-option -g bell-action none 			    # No bells at all
+unbind-key C-b					            # Unbind default prefix key
+set-option -g prefix M-a			        # Set default prefix key
+#bind-key C-a send-prefix 			        # Bind "C-a C-a" to send "C-a"
+# Reload configuration
+bind-key r source-file ~/.config/tmux/config \; display-message "~/.config/config reloaded"
+# History settings
+set-option -g history-limit 10000
+set-option -g history-file ~/.config/tmux/history
+#}}}
+# Pane & Windows {{{1
+# Switch panes
+bind-key  h select-pane -L
+bind-key  j select-pane -D
+bind-key  k select-pane -U
+bind-key  l select-pane -R
+# Switch windows
+unbind-key n
+bind-key -n M-p previous-window
+bind-key -n M-n next-window
+# Split pane with same directory
+unbind-key '"'
+unbind-key %
+bind-key m split-window -v -c "#{pane_current_path}"
+bind-key i split-window -h -c "#{pane_current_path}"
+bind-key m split-window -fv -c "#{pane_current_path}"
+bind-key i split-window -fh -c "#{pane_current_path}"
+# Resize panes
+bind-key -r M-h resize-pane -L
+bind-key -r M-j resize-pane -D
+bind-key -r M-k resize-pane -U
+bind-key -r M-l resize-pane -R
+# Toggle zoom
+bind-key -n M-z resize-pane -Z 				
+# Move panes
+bind-key -r H swap-pane -U
+bind-key -r L swap-pane -D
+# Kill pane
+bind-key x kill-pane
+# Swap windows across themselves
+# the second command was just a fix to follow the window while am moving
+bind-key -r "<" swap-window -t -1 \; select-window -t -1
+bind-key -r ">" swap-window -t +1 \; select-window -t +1
+# Kill window
+unbind-key &
+bind-key X kill-window
+#}}}
+# STATUS BAR {{{1
+# Status position
+#set-option -g status-position bottom
+# Status update interval
+set-option -g status-interval 5
+set-option -g window-status-separator ""
+set-option -g status-justify centre
+
+# Basic status bar colors
+set-option -g status-bg black
+set-option -g status-fg white
+# Left side of status bar
+set-option -g status-left-length 40
+set-option -g status-left "#[fg=brightwhite,bg=#0037cd] #(uptime -p | tr -d '[[:alpha:]]' | sed 's/ , /:/g')#[fg=#0037cd,bg=#171717] #[fg=#515151,bg=#171717]#S#[fg=#515151, bg=default] "
+# # Window status
+
+#set-option -g window-status-format "#[fg=black,bg=#313131]#[fg=brightwhite,bg=#313131] #I #W #[fg=#313131,bg=black]"
+
+set-option -g window-status-format "#[bg=black,fg=#515151] ■ "
+set-option -g window-status-current-format "#[bg=black,fg=#0037cd]#[fg=#c4c4c4,bg=#0037cd] #W #[bg=black,fg=#0037cd]"
+# Right side of status bar
+#set -g status-right ''
+set -g status-right '#[bg=black,fg=#515151 ] #[bg=black,fg=#c4c4c4 ] %d %b #[bg=black,fg=#0037cd]#[fg=#c4c4c4,bg=#0037cd] %H:%M '
+# Pane number indicator
+set-option -g display-panes-colour brightblack
+set-option -g display-panes-active-colour brightwhite
+#}}}
+
+# Clock mode
+set-option -g clock-mode-colour yellow
+set-option -g clock-mode-style 24
+set -g set-titles on
+set -g set-titles-string "#T"
+#set -g status-right '#(/usr/bin/gitmux -cfg $HOME/.config/gitmux/gitmux.conf "#{pane_current_path}") #[bg=black,fg=#515151 ] #[bg=black,fg=#c4c4c4 ] %d %b #[bg=black,fg=#0037cd]#[fg=#c4c4c4,bg=#0037cd] %H:%M '
