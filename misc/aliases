@@ -1,0 +1,106 @@
+#!/bin/env sh
+#alias sudo="doas --"
+# LS ALIASES
+#-----------
+alias \
+  ls='ls -hFN --color --group-directories-first' \
+  ll='ls -lh --group-directories-first' \
+  la='ls -a --group-directories-first' \
+  lla='la -lA' \
+  lf='lf-ueberzug'
+
+# MONITORING
+#-----------
+alias \
+  lsblk='lsblk -o NAME,FSAVAIL,SIZE,MOUNTPOINT,FSTYPE' \
+  diff='diff --color=auto' \
+  grep='grep --color=auto' \
+  df='df -h'
+
+# FILES
+#------
+alias \
+  vim="nvim" \
+  nv="nvim" \
+  vv="nvim "$XDG_CONFIG_HOME"/nvim/init.vim" \
+  vz="nvim "$XDG_CONFIG_HOME"/zsh/zshrc" \
+  vn="nvim "$XDG_CONFIG_HOME"/newsboat/urls" \
+  vc="nvim ~/dox/latex/cv/cv.tex" \
+
+
+# Git ALIASES
+#------------
+alias \
+  gs='git status -s' \
+  gd='git diff --word-diff' \
+  gb='git branch | fzf-tmux -d 15' \
+  gc='git checkout  $(git branch | fzf-tmux -d 15 --height 40%)' \
+  glg='git log --topo-order --all --graph --pretty=format:"%C(green)%h%C(reset) %s%C(red)%d%C(reset)%n"'\
+  #config='/usr/bin/git --git-dir=/home/zakaria/.config/.dtrepo.git --work-tree=/home/zakaria'\
+  #cl='config log --topo-order --all --graph --pretty=format:"%C(green)%h%C(reset) %s%C(red)%d%C(reset)%n"'\
+  #cs='config status -s' \
+  #cdd='config diff --word-diff' \
+# KUBERNETES ALIASES
+alias \
+    k='kubectl' \
+    kgo='kubectl get pods' \
+    kgd='kubectl get deploy' \
+    kgr='kubectl get rs' \
+    kgs='kubectl get svc' \
+    kgc='kubectl get cm' \
+    kga='kubectl get apply -f' \
+    kgA='kubectl get all' \
+
+# GLOBAL ALIASES
+#---------------
+alias \
+  -g W='| wc -l' \
+  -g G='| egrep --color' \
+  -g H='| head' \
+  -g L="| less" \
+  -g S='| sort -n' \
+  -g T='| tail' \
+  -g N='| nl'
+
+# xdg-base directory specification
+#----------------------------------
+alias \
+  tmux="tmux -f ${XDG_CONFIG_HOME}/tmux/config" \
+  mux='tmuxinator' \
+  abook="abook --config ${XDG_CONFIG_HOME}/abook/abookrc --datafile ${XDG_DATA_HOME}/abook/addressbook"\
+  bash="bash --init-file ${XDG_CONFIG_HOME}/bash/bashrc" \
+  xrdb="xrdb -load ~/.config/X11/Xresources"
+  #startx="startx ${XDG_CONFIG_HOME}/X11/xinitrc -- ${XDG_CONFIG_HOME}/X11/xserverrc" vt1' \
+
+# OTHER
+#------
+alias \
+  rm="rm -v" \
+  p="sudo pacman" \
+  pr="paru" \
+  py="python" \
+  mpv='mpv --volume=40' \
+  yt="youtube-dl --add-metadata -ic -o '%(title)s.%(ext)s'" \
+  yta="yt -x -f bestaudio/best --audio-format mp3" \
+  tw="mpv --ytdl-format='360p'"
+  zt='tmux split-window -p 20' \
+  #zt='tmux new -d -s zars nvim;\
+      #tmux split-window -p 20;\
+      #tmux attach -t zars'
+  #n="nnn -de" \
+  #agenda="~/dox/wrk/agenda/agenda ~/org/gtd/next.org "
+
+# FUNCTIONS
+#----------
+pmem(){ ps -eo size,pid,user,command --sort -size \
+	| awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr)  } { for ( x=4 ; x<=NF ; x++  ) { printf("%s ",$x)  } print ""  }' \
+	| cut -d "" -f2 | cut -d "-" -f1;}
+alias config=/usr/bin/git --git-dir=/home/zakaria/.config/.dotfiles --work-tree=/home/zakaria
+magit () {
+    git_root=$(git rev-parse --show-toplevel)
+    emacsclient -a emacs \
+        -e "(magit-status \"${git_root}\")"
+    if [[ -f `which osascript` ]]; then
+        osascript -e "tell application \"Emacs\" to activate"
+    fi
+}
